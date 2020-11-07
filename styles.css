@@ -1,0 +1,23 @@
+*{
+    box-sizing: border-box;
+}
+
+.cards-container {
+    /* border: 2px solid red; */
+    margin: auto;
+    margin-top: 100px;
+    width: 60%;
+}
+
+.coinCard {
+    display: inline-table;
+    width: 33.3%;
+    height: 180px;
+    padding: 15px;   
+}
+
+.mySwitch {
+    position: relative;
+    left: 80%;
+}
+
