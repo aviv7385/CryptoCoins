@@ -1,12 +1,37 @@
 *{
     box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
 }
 
+/* ============ navbar ============= */
+
+#navigation {
+    margin-top: 5%;
+    height: 100px;
+}
+
+#navBtns {
+    /* border: 2px solid black; */
+    width: fit-content;
+    margin-left: 20%;
+}
+
+#navBtns >button, #coinSearch > button {
+    margin: 10px;
+}
+
+#coinSearch {
+    /* border: 2px solid black; */
+    margin-left: 1%;
+}
+
+/* ============================= */
 .cards-container {
     /* border: 2px solid red; */
-    margin: auto;
-    margin-top: 100px;
+    margin-left: 20%;
+    margin-top: 5%;
     width: 60%;
+    font-size: 14pt;
 }
 
 .coinCard {
@@ -20,4 +45,29 @@
     position: relative;
     left: 80%;
 }
+/* ===============  collapse ============ */
+.moreInfo {
+    letter-spacing: 2px;
+}
 
+.coinPic {
+    width: 50px;
+    height: 50px;
+}
+
+/* ================= ABOUT ================ */
+
+.aboutHead {  
+    margin-top: 2%;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.aboutPar {
+  /* border: 1px solid red; */
+    margin-top: 2%;
+    font-weight: 600;
+    letter-spacing: 2px;
+    line-height: 200%;
+    text-align: justify;
+}
