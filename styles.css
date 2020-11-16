@@ -72,21 +72,14 @@
 
 /* ================= ABOUT ================ */
 
-/* .aboutMe, .aboutProject {
-    border: 2px solid green;
-   
-} */
-
 .aboutMeHead, .aboutProHead {  
-    /* border: 1px solid blue; */
-    margin-top: 2%;
+    margin-top: 10px;
     font-weight: 800;
     letter-spacing: 1px;
 }
 
 .aboutMePar, .aboutProPar {
-    /* border: 1px solid red; */
-    margin-top: 2%;
+    margin-top: 10px;
     font-weight: 600;
     letter-spacing: 2px;
     line-height: 200%;
