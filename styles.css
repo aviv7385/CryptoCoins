@@ -3,49 +3,64 @@
     font-family: 'Nunito', sans-serif;
 }
 
+#siteTitle {
+    padding: 20px 0;
+    font-weight: 900;
+    margin: 0 10%;
+}
+
 /* ============ navbar ============= */
 
-#navigation {
-    margin-top: 5%;
-    height: 100px;
-}
-
-#navBtns {
+#navBtns, #coinSearch {
     /* border: 2px solid black; */
     width: fit-content;
-    margin-left: 20%;
+    margin-left: 14%;
 }
 
-#navBtns >button, #coinSearch > button {
-    margin: 10px;
+#coinSearch > input {
+    width: 180px;
 }
 
-#coinSearch {
+/* ============== show coins =============== */
+
+.main-container {
     /* border: 2px solid black; */
-    margin-left: 1%;
+    width: 100%;
 }
 
-/* ============================= */
 .cards-container {
-    /* border: 2px solid red; */
-    margin-left: 20%;
+    border: 2px solid red;
+    margin-left: 10%;
     margin-top: 5%;
-    width: 60%;
+    width: 80%;
     font-size: 14pt;
 }
 
-.coinCard {
-    display: inline-table;
-    width: 33.3%;
-    height: 180px;
-    padding: 15px;   
+.coinCard { 
+    width: 30%;
+    padding: 10px;
+}
+
+#coinName, #coinSymbol, #coinToggle {
+    /* border: 3px solid red; */
+    height: 50px;
+    padding: 2px;
 }
 
 .mySwitch {
+    /* border: 3px solid red; */
     position: relative;
-    left: 80%;
+    width: 10px;
+    left: 75%;
 }
 /* ===============  collapse ============ */
+
+.moreInfoBtn {
+    /* border: 3px solid red; */
+    margin-top: 10px;
+   
+}
+
 .moreInfo {
     letter-spacing: 2px;
 }
@@ -57,17 +72,40 @@
 
 /* ================= ABOUT ================ */
 
-.aboutHead {  
+/* .aboutMe, .aboutProject {
+    border: 2px solid green;
+   
+} */
+
+.aboutMeHead, .aboutProHead {  
+    /* border: 1px solid blue; */
     margin-top: 2%;
     font-weight: 800;
     letter-spacing: 1px;
 }
 
-.aboutPar {
-  /* border: 1px solid red; */
+.aboutMePar, .aboutProPar {
+    /* border: 1px solid red; */
     margin-top: 2%;
     font-weight: 600;
     letter-spacing: 2px;
     line-height: 200%;
     text-align: justify;
 }
+
+#myPic {
+    width: 100px;
+}
+
+/* ============== footer ============= */
+footer {
+    /* border: 2px solid blue; */
+    width: 100%;
+    margin: 2% 10%;
+}
+
+#copyrights {
+    letter-spacing: 2px;
+    margin: 5px;
+}
+

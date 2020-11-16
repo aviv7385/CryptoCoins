@@ -21,32 +21,50 @@
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 
 </head>
 
 <body>
-    <nav id="navigation" class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <form class="form-inline my-2 my-lg-0" id="navBtns">
-            <button class="btn btn-primary" type="button" id="homeBtn" onclick="getCoins()">Home</button>
-            <button class="btn btn-primary" type="button" id="reportsBtn" onclick="selectCoins()">Live Reports</button>
-            <button class="btn btn-primary" type="button" id="aboutBtn" onclick="displayAboutMe()">About</button>
-        </form>
-        <form class="form-inline my-2 my-lg-0" id="coinSearch">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-primary my-2 my-sm-0" type="button">Search</button>
-        </form>
-    </nav>
+    <div class="containerfluid">
+        <header>
+            <div class="row justify-content-md-center">
+                <h1 class="col" id="siteTitle">Crypto Currency</h1>
+            </div>
+            
 
-    <div class="main-container">
-        <div class="cards-container">
+            <nav id="navigation" class="row justify-content-md-center navbar navbar-expand-lg navbar-dark bg-primary">
+                <div class="col-12 col-md-6 col-lg-8" id="links">
+                    <form class="form-inline my-2 my-lg-0" id="navBtns">
+                        <button class="btn btn-primary" type="button" id="homeBtn" onclick="getCoins()">Home</button>
+                        <button class="btn btn-primary" type="button" id="reportsBtn" onclick="selectCoins()">Live
+                            Reports</button>
+                        <button class="btn btn-primary" type="button" id="aboutBtn"
+                            onclick="displayAboutMe()">About</button>
+                    </form>
+                </div>
 
-        </div>
+                <div class="col-lg-4 col-md-6 col-sm-12" id="search">
+                    <form class="form-inline my-2 my-lg-0" id="coinSearch">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-primary my-2 my-sm-0" type="button">Search</button>
+                    </form>
+                </div>
+            </nav>
+        </header>
 
+        <main>
+            <div class="main-container">
+                <div class="cards-container row row-cols-1 row-cols-md-4 justify-content-md-center">
+                </div>
+            </div>
+        </main>
 
+        <footer>
+            <p id="copyrights">All Rights Reserved &copy;</p>
+        </footer>
     </div>
-
 </body>
 
 </html>
