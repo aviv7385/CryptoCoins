@@ -27,20 +27,20 @@
 </head>
 
 <body>
-    <div class="containerfluid">
-        <header>
+    <div class="container-fluid">
+        
             <div class="row justify-content-md-center">
                 <h1 class="col" id="siteTitle">Crypto Currency</h1>
             </div>
             
 
             <nav id="navigation" class="row justify-content-md-center navbar navbar-expand-lg navbar-dark bg-warning">
-                <div class="col-12 col-md-6 col-lg-8" id="links">
+                <div class="col-12 col-md-6 col-lg-4" id="links">
                     <form class="form-inline my-2 my-lg-0" id="navBtns">
-                        <button class="btn btn-warning" type="button" id="homeBtn" onclick="getCoins()">Home</button>
-                        <button class="btn btn-warning" type="button" id="reportsBtn" onclick="selectCoins()">Live
+                        <button class="btn btn-warning btn-lg" type="button" id="homeBtn" onclick="getCoins()">Home</button>
+                        <button class="btn btn-warning btn-lg" type="button" id="reportsBtn" onclick="selectCoins()">Live
                             Reports</button>
-                        <button class="btn btn-warning" type="button" id="aboutBtn"
+                        <button class="btn btn-warning btn-lg" type="button" id="aboutBtn"
                             onclick="displayAboutMe()">About</button>
                     </form>
                 </div>
@@ -48,18 +48,18 @@
                 <div class="col-lg-4 col-md-6 col-sm-12" id="search">
                     <form class="form-inline my-2 my-lg-0" id="coinSearch">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-warning my-2 my-sm-0" type="button">Search</button>
+                        <button class="btn btn-warning btn-lg my-2 my-sm-0" type="button">Search</button>
                     </form>
                 </div>
             </nav>
-        </header>
+      
 
-        <main>
+   
             <div class="main-container">
                 <div class="cards-container row row-cols-1 row-cols-md-4 justify-content-md-center">
                 </div>
             </div>
-        </main>
+       
 
         <footer>
             <p id="copyrights">All Rights Reserved &copy;</p>

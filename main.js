@@ -26,15 +26,15 @@ function getJsonFromServer(jsonUrl) {
 function displayCoins(cryptRequest) {
     for (let i = 0; i < 300; i++) {
         $(".cards-container").append(`
-        <div class="card coinCard col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+        <div class="card coinCard col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 mb-4">
         <div class="card-body">   
             <div class="row">
                 <div class="col" id="coinSymbol">
                     <h5 class="card-title">${cryptRequest[i].symbol}</h5>
                 </div>
-                <div class="col" id="coinToggle">
+                <div class="col-3" id="coinToggle">
                     <div class="custom-control custom-switch mySwitch">
-                        <input type="checkbox" class="custom-control-input toggleCheckbox" id="customSwitch${i}">
+                        <input type="checkbox" class="custom-control-input toggleCheckbox" id="customSwitch${i}" width="100">
                         <label class="custom-control-label" for="customSwitch${i}"></label>
                     </div>
                 </div>

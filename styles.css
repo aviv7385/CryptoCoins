@@ -3,7 +3,7 @@
     font-family: 'Nunito', sans-serif;
 }
 
-body {
+.container-fluid {
     background-image: url(Assets/images/wallpaper8.jpg);
     background-attachment: fixed;
     background-position: center;
@@ -15,19 +15,22 @@ body {
     padding: 20px 0;
     font-weight: 900;
     font-size: 50pt;
-    margin: 0 10%;
+    margin: 0 5%;
 }
+
 
 /* ============ navbar ============= */
 
 #navBtns, #coinSearch {
     /* border: 2px solid black; */
-    width: fit-content;
-    margin-left: 14%;
+    width: fit-content;  
+    margin-left: 15%; 
 }
+
 
 #coinSearch > input {
     width: 180px;
+    font-size: 14pt;
 }
 
 /* ============== show coins =============== */
@@ -39,28 +42,40 @@ body {
 
 .cards-container {
     /* border: 2px solid red; */
-    margin-left: 10%;
+    margin-left: 5%;
     margin-top: 5%;
-    width: 80%;
+    width: 90%;
     font-size: 14pt;
 }
 
+.card-title {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
 .coinCard { 
-    width: 30%;
-    padding: 10px;
+    /* border: 3px solid red; */
+    padding: 5px;
+    margin: 0 0 3px 3px;
+    height: fit-content;
+    opacity: 0.9;
+}
+
+.coinCard:hover {
+    opacity: 1;
 }
 
 #coinName, #coinSymbol, #coinToggle {
     /* border: 3px solid red; */
-    height: 50px;
+    height: 80px;
     padding: 2px;
 }
 
 .mySwitch {
     /* border: 3px solid red; */
     position: relative;
-    width: 10px;
-    left: 75%;
+    width: fit-content;
+    left: 60%;
 }
 
 /*sets the background color of switch to yellow when it is checked*/ 
@@ -99,6 +114,7 @@ body {
     margin-top: 10px;
     font-weight: 800;
     letter-spacing: 1px;
+    opacity: 0.9;
 }
 
 .aboutMePar, .aboutProPar {
@@ -108,21 +124,27 @@ body {
     letter-spacing: 2px;
     line-height: 200%;
     text-align: justify;
+    opacity: 0.9;
+}
+
+.cards-container>div>p:hover {
+    opacity: 1;
 }
 
 #myPic {
     width: 100px;
+    opacity: 0.9;
 }
 
 /* ============== footer ============= */
 footer {
     /* border: 2px solid blue; */
     width: 100%;
-    margin: 2% 10%;
+    margin: 0 6%;
 }
 
 #copyrights {
-    background-color: white;
+    color: white;
     width: fit-content;
     letter-spacing: 2px;
     margin: 5px;
