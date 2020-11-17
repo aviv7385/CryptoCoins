@@ -47,7 +47,7 @@ function displayCoins(cryptRequest) {
             </div>
             
             <div class="row">
-                <button onclick="getMoreInfo(id)" id="${cryptRequest[i].id}" class="btn btn-primary moreInfoBtn" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
+                <button onclick="getMoreInfo(id)" id="${cryptRequest[i].id}" class="btn btn-warning moreInfoBtn" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
                     More Info
                 </button>
         

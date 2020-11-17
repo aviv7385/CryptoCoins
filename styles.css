@@ -53,12 +53,24 @@
     width: 10px;
     left: 75%;
 }
-/* ===============  collapse ============ */
+
+/*sets the background color of switch to yellow when it is checked*/ 
+.custom-control-input:checked ~ .custom-control-label::before { 
+    border-color:#f0ad4e !important; 
+    background-color:#f0ad4e  !important; 
+} 
+  
+/*sets the background color of switch to yellow when it is active*/ 
+.custom-control-input:active ~ .custom-control-label::before { 
+    background-color:#f0ad4e !important; 
+    border-color:#f0ad4e !important; 
+} 
+        
+/* ===============  collapse ============== */
 
 .moreInfoBtn {
     /* border: 3px solid red; */
     margin-top: 10px;
-   
 }
 
 .moreInfo {
