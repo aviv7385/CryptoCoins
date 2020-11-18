@@ -1,5 +1,8 @@
 /// <reference path="jquery-3.5.1.js" />
 
+//on page load, call this function
+getCoins();
+
 function getCoins() {
     //clear previous content
     $(".cards-container").empty()
@@ -7,7 +10,7 @@ function getCoins() {
     //and give the desired url as an object
     getJsonFromServer("https://api.coingecko.com/api/v3/coins/list")
         .then(cryptCoins => displayCoins(cryptCoins)) //then() >> built-in function that calls a function to report on success (resolve)
-        .catch(err => alert(`Error! Status: ${err.status}, ${err.statusTest}`)); //catch() >> built-in function that calls a function to report on error (reject)
+        .catch(err => console.log(`Error! Status: ${err.status}, ${err.statusTest}`)); //catch() >> built-in function that calls a function to report on error (reject)
 }
 
 // a function that gets a url as an argument
@@ -47,12 +50,12 @@ function displayCoins(cryptRequest) {
             </div>
             
             <div class="row">
-                <button onclick="getMoreInfo(id)" id="${cryptRequest[i].id}" class="btn btn-warning moreInfoBtn" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
+                <button onclick="getMoreInfo(id, ${i})" id="${cryptRequest[i].id}" class="btn btn-warning moreInfoBtn" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
                     More Info
                 </button>
         
                 <div class="collapse" id="collapseExample${i}">
-                    <div class="card card-body moreInfo">
+                    <div class="card card-body moreInfo" id="moreInfo${i}">
                     
                     </div>
                 </div>
@@ -63,26 +66,22 @@ function displayCoins(cryptRequest) {
 }
 
 // a function to get extra info about each coin (that will be displayed in the collapse component)
-function getMoreInfo(id) {
-    $.ajax({
-        url: `https://api.coingecko.com/api/v3/coins/${id}`,
-        error: err => alert(err),
-        success: infoRequest => {
-            $(".moreInfo").html(
-                `<img class="coinPic" src="${infoRequest.image.small}"><br>
-                USD: $${infoRequest.market_data.current_price.usd}<br>
-                EUR: &euro;${infoRequest.market_data.current_price.eur}<br>
-                ILS: ${infoRequest.market_data.current_price.ils}&#8362;<br>`
-            )
-        }
-    });
+function getMoreInfo(id, index) {
+    getJsonFromServer(`https://api.coingecko.com/api/v3/coins/${id}`)
+        .then(moreInfoRequest => displayMoreInfo(moreInfoRequest, index))
+        .catch(err => console.log(err))
 }
 
-//on page load, call this function
-getCoins();
+function displayMoreInfo(infoRequest, index) {
+    $(`#moreInfo${index}`).html(
+        `<img class="coinPic" src="${infoRequest.image.small}"><br>
+        USD: $${infoRequest.market_data.current_price.usd}<br>
+        EUR: &euro;${infoRequest.market_data.current_price.eur}<br>
+        ILS: ${infoRequest.market_data.current_price.ils}&#8362;<br>`
+    )
+}
 
 // a function to display the "about" page
-
 function displayAboutMe() {
     //remove previous content and insert new content
     $(".cards-container").empty()
@@ -97,7 +96,6 @@ function displayAboutMe() {
         <p class="aboutProPar">Feugiat scelerisque varius morbi enim. Id nibh tortor id aliquet lectus. Vitae semper quis lectus nulla at. In massa tempor nec feugiat nisl pretium fusce. Dignissim suspendisse in est ante in nibh. Integer quis auctor elit sed vulputate mi sit amet. Quisque non tellus orci ac auctor augue mauris. Erat pellentesque adipiscing commodo elit at imperdiet dui accumsan sit. Lorem donec massa sapien faucibus et molestie ac feugiat sed. Nisi lacus sed viverra tellus in. Non enim praesent elementum facilisis leo vel. Morbi leo urna molestie at elementum eu facilisis.</p>
     </div>
     `)
-
 }
 
 
