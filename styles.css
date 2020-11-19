@@ -9,13 +9,16 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+   
 }
 
 #siteTitle {
+    color: white;
     padding: 20px 0;
     font-weight: 900;
     font-size: 50pt;
     margin: 0 5%;
+    text-shadow: 3px 3px 3px black;
 }
 
 
@@ -37,7 +40,7 @@
 
 .main-container {
     /* border: 2px solid black; */
-    width: 100%;
+    max-width: 100%;
 }
 
 .cards-container {
@@ -46,6 +49,7 @@
     margin-top: 5%;
     width: 90%;
     font-size: 14pt;
+    min-height: 500px;
 }
 
 .card-title {
