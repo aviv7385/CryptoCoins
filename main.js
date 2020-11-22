@@ -204,7 +204,7 @@ function searchCoin(value) {
     // if any of the includes the input - display those coins and change the flag to "true"
     for (let i = 0; i < allCoins.length; i++) {
         const coin = allCoins[i];
-        if (coin.name.includes(value) || coin.symbol == value) {
+        if (coin.name.includes(value.toUpperCase()) || coin.name.includes(value.toLowerCase()) || coin.symbol.includes(value.toUpperCase()) || coin.symbol.includes(value.toLowerCase())) {
             displayCoinCard(coin, i);
             isFound = true;
         }
