@@ -6,10 +6,24 @@ getCoins();
 function getCoins() {
     //clear previous content
     $(".cards-container").empty()
+
+    //show spinner (progress bar)
+    $(".cards-container").html(`
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-warning" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    `)
+
     //get the Promise object by calling the function where the Promise object was created
     //and give the desired url as an object
     getJsonFromServer("https://api.coingecko.com/api/v3/coins/list")
-        .then(cryptRequest => displayCoins(cryptRequest)) //then() >> built-in function that calls a function to report on success (resolve)
+        .then(cryptRequest => {
+            //clear previous content - specifically the spinner
+            $(".cards-container").empty()
+            displayAllCoins(cryptRequest)
+        }) //then() >> built-in function that calls a function to report on success (resolve)
         .catch(err => console.log(err)); //catch() >> built-in function that calls a function to report on error (reject)
 }
 
@@ -29,57 +43,79 @@ function getJsonFromServer(jsonUrl) {
 
 //--------------------------------------------------------------------------------------------------------
 
-//this function gets an object as an argument and will display the wanted information from that object 
-function displayCoins(cryptRequest) {
-    //remove from local storage any former array of all coins
+//a function to display a card with coin information
+function displayCoinCard(coin, index) {
+    $(".cards-container").append(`
+    <div class="card coinCard col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 mb-4">
+    <div class="card-body">   
+        <div class="row">
+            <div class="col" id="coinSymbol">
+                <h5 class="card-title">${coin.symbol}</h5>
+            </div>
+            <div class="col-3" id="coinToggle">
+                <div class="custom-control custom-switch mySwitch">
+                    <input type="checkbox" class="custom-control-input toggleCheckbox" id="customSwitch${index}" width="100">
+                    <label class="custom-control-label" for="customSwitch${index}"></label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col" id="coinName">
+                <p class="card-text">${coin.name}</p><br>
+            </div>
+        </div>
+        
+        <div class="row">
+            <button onclick="getMoreInfo(id, ${index})" id="${coin.id}" class="btn btn-warning moreInfoBtn" type="button" data-toggle="collapse" data-target="#collapseExample${index}" aria-expanded="false" aria-controls="collapseExample${index}">
+                More Info
+            </button>
+    
+            <div class="collapse" id="collapseExample${index}">
+                <div class="card card-body moreInfo" id="moreInfo${index}">
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>`)
+}
+
+
+//this function gets an object (from an API) as an argument and will display the wanted information from that object 
+//by calling the displayCoinCard function
+function displayAllCoins(cryptRequest) {
+    //remove from local storage any former array of allCoins (otherwise the same 300 coins will be added to the same array, 
+    //making the array grow larger each time the loop runs)
     localStorage.removeItem("allCoins");
     //iterate through the objects array received from the server
     for (let i = 0; i < 300; i++) {
         //add each coin object to the objects array which is being saved to the local storage
         saveToLocalStorage(cryptRequest[i]);
-        $(".cards-container").append(`
-        <div class="card coinCard col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 mb-4">
-        <div class="card-body">   
-            <div class="row">
-                <div class="col" id="coinSymbol">
-                    <h5 class="card-title">${cryptRequest[i].symbol}</h5>
-                </div>
-                <div class="col-3" id="coinToggle">
-                    <div class="custom-control custom-switch mySwitch">
-                        <input type="checkbox" class="custom-control-input toggleCheckbox" id="customSwitch${i}" width="100">
-                        <label class="custom-control-label" for="customSwitch${i}"></label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col" id="coinName">
-                    <p class="card-text">${cryptRequest[i].name}</p><br>
-                </div>
-            </div>
-            
-            <div class="row">
-                <button onclick="getMoreInfo(id, ${i})" id="${cryptRequest[i].id}" class="btn btn-warning moreInfoBtn" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
-                    More Info
-                </button>
-        
-                <div class="collapse" id="collapseExample${i}">
-                    <div class="card card-body moreInfo" id="moreInfo${i}">
-                    
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>`)
+        displayCoinCard(cryptRequest[i], i);
     }
 }
 
 //------------------------------------------------------------------------------
 
+// ======================== MORE INFO =======================
+
 // a function to get extra info about each coin 
 function getMoreInfo(id, index) {
+    //show spinner (progress bar)
+    $(`#moreInfo${index}`).html(`
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-warning" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    `)
     getJsonFromServer(`https://api.coingecko.com/api/v3/coins/${id}`)
-        .then(moreInfoRequest => displayMoreInfo(moreInfoRequest, index))
+        .then(moreInfoRequest => {
+            //clear previous content (specifically - the spinner)
+            $(`#moreInfo${index}`).empty();
+            displayMoreInfo(moreInfoRequest, index)
+        })
         .catch(err => console.log(err))
 }
 
@@ -94,6 +130,8 @@ function displayMoreInfo(infoRequest, index) {
 }
 
 //-------------------------------------------------------------------------------------------
+
+//=========== ABOUT ==================
 
 // a function to display the "about" page when clicking the "about" button
 $("#aboutBtn").on("click", function () {
@@ -114,6 +152,7 @@ $("#aboutBtn").on("click", function () {
 
 //-----------------------------------------------------------------------------------------------
 
+//=============== TOGGLE BUTTONS ===================
 
 
 //---------------------------------------------------------------------------
@@ -152,61 +191,37 @@ function searchCoin(value) {
     }
 
     //validate the value entered is not an empty string
-    if (value == "" || value.trim().length < 1) {
-        throw new Error("Please enter a coin name");
+    if (value == "" || value.trim().length < 1 || value.length < 3) {
+        throw new Error("Please enter at least 3 characters");
+    }
+    //clear previous content
+    $(".cards-container").empty();
+
+    // create a flag for the searched input
+    let isFound = false;
+
+    // iterate through the array of coins and compare the input value to the name/id/symbol of each coin
+    // if any of the includes the input - display those coins and change the flag to "true"
+    for (let i = 0; i < allCoins.length; i++) {
+        const coin = allCoins[i];
+        if (coin.name.includes(value) || coin.symbol == value) {
+            displayCoinCard(coin, i);
+            isFound = true;
+        }
     }
 
-    for (const coin of allCoins) {
-        const index = allCoins.indexOf(coin);
-
-        if (value == coin.name || value == coin.id || value == coin.symbol) {
-            //clear previous content
-            $(".cards-container").empty()
-
-            $(".cards-container").append(`
-        <div class="card coinCard col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 mb-4">
-        <div class="card-body">   
-            <div class="row">
-                <div class="col" id="coinSymbol">
-                    <h5 class="card-title">${coin.symbol}</h5>
-                </div>
-                <div class="col-3" id="coinToggle">
-                    <div class="custom-control custom-switch mySwitch">
-                        <input type="checkbox" class="custom-control-input toggleCheckbox" id="customSwitch${index}" width="100">
-                        <label class="custom-control-label" for="customSwitch${index}"></label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col" id="coinName">
-                    <p class="card-text">${coin.name}</p><br>
-                </div>
-            </div>
-            
-            <div class="row">
-                <button onclick="getMoreInfo(id, ${index})" id="${coin.id}" class="btn btn-warning moreInfoBtn" type="button" data-toggle="collapse" data-target="#collapseExample${index}" aria-expanded="false" aria-controls="collapseExample${index}">
-                    More Info
-                </button>
-        
-                <div class="collapse" id="collapseExample${index}">
-                    <div class="card card-body moreInfo" id="moreInfo${index}">
-                    
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>`)
-        }
-
-        //throw new Error("Sorry, no information about this coin");
-
+    // if not match was found - meaning the flag is false - show an error message
+    if (!isFound) {
+        throw new Error("Sorry, coin not found");
     }
 }
 
 // a function for the search feature
+// on click on the search button, call the searchCoin function
+//if there was an error in that function - show the error on alert
 $("#searchBtn").on("click", function () {
     const searchInput = $("#searchInput").val();
+
     try {
         searchCoin(searchInput);
     }

@@ -21,6 +21,10 @@
     text-shadow: 3px 3px 3px black;
 }
 
+.spinner-border {
+    width: 3rem; 
+    height: 3rem;
+}
 
 /* ============ navbar ============= */
 
@@ -141,16 +145,15 @@
 }
 
 /* ============== footer ============= */
-footer {
-    /* border: 2px solid blue; */
-    width: 100%;
-    margin: 0 6%;
-}
+
+
 
 #copyrights {
+    /* border: 2px solid red; */
     color: white;
     width: fit-content;
     letter-spacing: 2px;
-    margin: 5px;
+    margin: 0 5%;
+    padding: 1% 0;
 }
 
