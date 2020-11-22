@@ -10,7 +10,7 @@ function getCoins() {
     //show spinner (progress bar)
     $(".cards-container").html(`
     <div class="d-flex justify-content-center">
-        <div class="spinner-border text-warning" role="status">
+        <div class="spinner-border text-light" role="status">
             <span class="sr-only"></span>
         </div>
     </div>
