@@ -3,7 +3,12 @@
 //on page load, call this function
 getCoins();
 
-function getCoins() {
+//event function - when clicking on the "Home" button - call the getCoins function
+$(function () {
+    $("#homeBtn").on("click", getCoins);
+})
+
+async function getCoins() {
     //clear previous content
     $(".cards-container").empty()
 
@@ -16,17 +21,20 @@ function getCoins() {
     </div>
     `)
 
-    //get the Promise object by calling the function where the Promise object was created
-    //and give the desired url as an object
-    getJsonFromServer("https://api.coingecko.com/api/v3/coins/list")
-        .then(cryptRequest => {
-            //clear previous content - specifically the spinner
-            $(".cards-container").empty()
-            displayAllCoins(cryptRequest)
-        }) //then() >> built-in function that calls a function to report on success (resolve)
-        .catch(err => console.log(err)); //catch() >> built-in function that calls a function to report on error (reject)
-}
+    try {
+        // //get the Promise object by calling the function where the Promise object was created
+        //and give the desired url as an object
+        const cryptRequest = await getJsonFromServer("https://api.coingecko.com/api/v3/coins/list");
+        //clear previous content - specifically the spinner
+        $(".cards-container").empty();
+        //display the coin cards
+        displayAllCoins(cryptRequest);
+    }
 
+    catch (err) {
+        console.log(err)
+    }
+}
 //------------------------------------------------------------------------------------------------------------------
 
 // a function that gets a url as an argument
@@ -100,8 +108,8 @@ function displayAllCoins(cryptRequest) {
 
 // ======================== MORE INFO =======================
 
-// a function to get extra info about each coin 
-function getMoreInfo(id, index) {
+// a function to get extra info about each coin (from the server)
+async function getMoreInfo(id, index) {
     //show spinner (progress bar)
     $(`#moreInfo${index}`).html(`
     <div class="d-flex justify-content-center">
@@ -110,17 +118,22 @@ function getMoreInfo(id, index) {
         </div>
     </div>
     `)
-    getJsonFromServer(`https://api.coingecko.com/api/v3/coins/${id}`)
-        .then(moreInfoRequest => {
-            //clear previous content (specifically - the spinner)
-            $(`#moreInfo${index}`).empty();
-            displayMoreInfo(moreInfoRequest, index)
-        })
-        .catch(err => console.log(err))
+
+    try {
+        const moreInfoRequest = await getJsonFromServer(`https://api.coingecko.com/api/v3/coins/${id}`);
+        //clear previous content (specifically - the spinner)
+        $(`#moreInfo${index}`).empty();
+        saveToSessionStorage(moreInfoRequest); //save the returned info in the session storage
+        displayMoreInfo(moreInfoRequest, index); // display the information in the collapse
+    }
+    catch (err) {
+        console.log(err)
+    }
 }
 
 // a function to display the "more info" in the collapse area, when clicking the "more info" button
 function displayMoreInfo(infoRequest, index) {
+
     $(`#moreInfo${index}`).html(
         `<img class="coinPic" src="${infoRequest.image.small}"><br>
         USD: $${infoRequest.market_data.current_price.usd}<br>
@@ -155,9 +168,14 @@ $("#aboutBtn").on("click", function () {
 //=============== TOGGLE BUTTONS ===================
 
 
+
+
+
+
 //---------------------------------------------------------------------------
 
-//saving to local storage
+//save the array of coins objects (returned from the server) as an array of objects in the local storage
+//for the search feature (so the search will be produced locally instead of having to get information from the server each time)
 function saveToLocalStorage(coinObj) {
     let allCoins = [];
 
@@ -171,6 +189,22 @@ function saveToLocalStorage(coinObj) {
     allCoinsJsonString = JSON.stringify(allCoins);
     localStorage.setItem("allCoins", allCoinsJsonString);
 }
+
+//save the information (returned from the server for the "more info" collapse section) in the session storage
+function saveToSessionStorage(moreInfoObj) {
+    let allMoreInfo = [];
+
+    let allMoreInfoJsonString = sessionStorage.getItem("allMoreInfo");
+    if (allMoreInfoJsonString != null) {
+        allMoreInfo = JSON.parse(allMoreInfoJsonString);
+    }
+
+    allMoreInfo.push(moreInfoObj);
+
+    allMoreInfoJsonString = JSON.stringify(allMoreInfo);
+    sessionStorage.setItem("allMoreInfo", allMoreInfoJsonString);
+}
+
 
 //-------------------------------------------------------------------------------
 
