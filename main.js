@@ -62,8 +62,8 @@ function displayCoinCard(coin, index) {
             </div>
             <div class="col-3" id="coinToggle">
                 <div class="custom-control custom-switch mySwitch">
-                    <input type="checkbox" class="custom-control-input toggleCheckbox" id="customSwitch${index}" width="100">
-                    <label class="custom-control-label" for="customSwitch${index}"></label>
+                    <input type="checkbox" class="custom-control-input toggleCheckbox" onclick="toggleCheckbox(id)" id="${coin.symbol}" width="100">
+                    <label class="custom-control-label" for="${coin.symbol}"></label>
                 </div>
             </div>
         </div>
@@ -95,11 +95,11 @@ function displayCoinCard(coin, index) {
 function displayAllCoins(cryptRequest) {
     //remove from local storage any former array of allCoins (otherwise the same 300 coins will be added to the same array, 
     //making the array grow larger each time the loop runs)
-    localStorage.removeItem("allCoins");
+    sessionStorage.removeItem("allCoins");
     //iterate through the objects array received from the server
     for (let i = 0; i < 300; i++) {
         //add each coin object to the objects array which is being saved to the local storage
-        saveToLocalStorage(cryptRequest[i]);
+        saveCoinsToSessionStorage(cryptRequest[i]);
         displayCoinCard(cryptRequest[i], i);
     }
 }
@@ -123,8 +123,24 @@ async function getMoreInfo(id, index) {
         const moreInfoRequest = await getJsonFromServer(`https://api.coingecko.com/api/v3/coins/${id}`);
         //clear previous content (specifically - the spinner)
         $(`#moreInfo${index}`).empty();
-        saveToSessionStorage(moreInfoRequest); //save the returned info in the session storage
+
+
+
+        // saveToSessionStorage(id, $(".moreInfo")); //save the returned info in the session storage
+        // twoMinutesTimer(id)//delete object from session storage 2 minutes after the click
+
         displayMoreInfo(moreInfoRequest, index); // display the information in the collapse
+
+        //-----------
+        //  const savedInfo = sessionStorage.getItem(id);
+
+        //  if (savedInfo != null) {
+        //      id = JSON.parse(savedInfo);
+        //      displayMoreInfo(savedInfo, index)
+        //  }
+        //--------------
+
+
     }
     catch (err) {
         console.log(err)
@@ -134,12 +150,17 @@ async function getMoreInfo(id, index) {
 // a function to display the "more info" in the collapse area, when clicking the "more info" button
 function displayMoreInfo(infoRequest, index) {
 
-    $(`#moreInfo${index}`).html(
-        `<img class="coinPic" src="${infoRequest.image.small}"><br>
-        USD: $${infoRequest.market_data.current_price.usd}<br>
-        EUR: &euro;${infoRequest.market_data.current_price.eur}<br>
-        ILS: ${infoRequest.market_data.current_price.ils}&#8362;<br>`
-    )
+    const currentCoinPrice = infoRequest.market_data.current_price;
+    let moreInfo = `<img class="coinPic" src="${infoRequest.image.small}"><br>
+    USD: $${currentCoinPrice.usd}<br>
+    EUR: &euro;${currentCoinPrice.eur}<br>
+    ILS: ${currentCoinPrice.ils}&#8362;<br>`
+
+    $(`#moreInfo${index}`).html(moreInfo);
+
+    saveToSessionStorage(infoRequest.id, moreInfo);
+    twoMinutesTimer(infoRequest.id);
+
 }
 
 //-------------------------------------------------------------------------------------------
@@ -167,19 +188,93 @@ $("#aboutBtn").on("click", function () {
 
 //=============== TOGGLE BUTTONS ===================
 
+// when choosing a coin by checking the toggle checkbox, push it into an array 
+// if the user chooses more than 5 coins - display a popup modal and ask the user to remove a coin or more, so there
+//would be no more than 5 coins
 
+let checkboxArray = [];
 
+function toggleCheckbox(coin) {
+    if ($(`#${coin}`).is(":checked")) {
+        checkboxArray.push(coin);
+    }
+    else {
+        const existingIndex = checkboxArray.indexOf(coin);
+        if (existingIndex > -1) {
+            checkboxArray.splice(existingIndex, 1);
+        }
+    }
+    console.log(checkboxArray);
 
+    // if the user chooses more than 5 coins - display the modal with a list of the chosen coins 
+    // and ask the user to take on (or more) off 
+    if (checkboxArray.length > 5) {
+        const numOfCoins = checkboxArray.length;
+        const difference = numOfCoins - 5;
+        $("#modalText").html(""); // delete previous content
+        $("#modalText").html(`You chose ${numOfCoins} coins, please remove ${difference}`);
+        const chosenCoins = checkboxArray.map(coin => `<button onclick="removeCoins(value)" class="btn btn-warning removeCoinBtn" type="button" value=${coin}>${coin}</button>`);
+        $(".chosenCoins").html("").append(`
+            <div>
+            ${chosenCoins.join("  ")}
+            </div>
+        `)
+        myModal.style.display = "block";
+    }
+}
 
+// Get the modal obj
+const myModal = document.getElementById("myModal");
 
+// Get the <span> element that closes the modal
+const span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function () {
+    myModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+    if (event.target == myModal) {
+        myModal.style.display = "none";
+    }
+}
+
+// when the user clicks a coin button (inside the modal) - remove it from the chosen coins array
+// and remove the button from the modal
+function removeCoins(coinValue) {
+    const existingIndex = checkboxArray.indexOf(coinValue);
+    if (existingIndex > -1) {
+        checkboxArray.splice(existingIndex, 1);
+        console.log(checkboxArray);
+    }
+    $(`.removeCoinBtn[value|='${coinValue}']`).fadeOut('slow');
+}
+
+//save button
+$(".saveBtn").on("click", function (){
+    if (checkboxArray.length > 5){
+        const numOfCoins = checkboxArray.length;
+        const difference = numOfCoins - 5;
+        $("#modalText").html("");
+        $("#modalText").html(`You still have ${numOfCoins} coins, please remove ${difference}`);
+    }
+    else {
+        //if the user chose 5 coins or less - save the array in the session storage (for later use) and close the modal
+        sessionStorage.setItem("chosenCoins", checkboxArray);
+        myModal.style.display = "none";
+    }
+
+});
 //---------------------------------------------------------------------------
 
-//save the array of coins objects (returned from the server) as an array of objects in the local storage
+//save the array of coins objects (returned from the server) as an array of objects in the session storage
 //for the search feature (so the search will be produced locally instead of having to get information from the server each time)
-function saveToLocalStorage(coinObj) {
+function saveCoinsToSessionStorage(coinObj) {
     let allCoins = [];
 
-    let allCoinsJsonString = localStorage.getItem("allCoins");
+    let allCoinsJsonString = sessionStorage.getItem("allCoins");
     if (allCoinsJsonString != null) {
         allCoins = JSON.parse(allCoinsJsonString);
     }
@@ -187,24 +282,31 @@ function saveToLocalStorage(coinObj) {
     allCoins.push(coinObj);
 
     allCoinsJsonString = JSON.stringify(allCoins);
-    localStorage.setItem("allCoins", allCoinsJsonString);
+    sessionStorage.setItem("allCoins", allCoinsJsonString);
 }
 
 //save the information (returned from the server for the "more info" collapse section) in the session storage
-function saveToSessionStorage(moreInfoObj) {
-    let allMoreInfo = [];
 
-    let allMoreInfoJsonString = sessionStorage.getItem("allMoreInfo");
-    if (allMoreInfoJsonString != null) {
-        allMoreInfo = JSON.parse(allMoreInfoJsonString);
-    }
+function saveToSessionStorage(id, moreInfoDiv) {
 
-    allMoreInfo.push(moreInfoObj);
 
-    allMoreInfoJsonString = JSON.stringify(allMoreInfo);
-    sessionStorage.setItem("allMoreInfo", allMoreInfoJsonString);
+    // let extraInfoJsonString = sessionStorage.getItem("extraInfo");
+    // if (extraInfoJsonString != null) {
+    //     extraInfo = JSON.parse(allExtraInfoJsonString);
+    // }
+
+
+    let extraInfo = JSON.stringify(moreInfoDiv);
+    sessionStorage.setItem(id, extraInfo);
 }
 
+// remove item from session storage, 2 minutes after it was saved
+let timer;
+function twoMinutesTimer(id) {
+    timer = setTimeout(() => {
+        sessionStorage.removeItem(id);
+    }, 120000)
+}
 
 //-------------------------------------------------------------------------------
 
@@ -219,7 +321,7 @@ function searchCoin(value) {
     //clear the search input field 
     $("#searchInput").val("");
     //get coins objects array from local storage
-    let allCoinsJsonString = localStorage.getItem("allCoins");
+    let allCoinsJsonString = sessionStorage.getItem("allCoins");
     if (allCoinsJsonString != null) {
         allCoins = JSON.parse(allCoinsJsonString);
     }
