@@ -123,7 +123,11 @@
     line-height: 200%;
     text-align: justify;
     opacity: 0.9;
-    padding: 20px;
+    padding: 50px;
+}
+
+li, h3 {
+    text-align: left;
 }
 
 .aboutMe:hover, .aboutProject:hover {
