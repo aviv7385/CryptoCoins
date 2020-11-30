@@ -171,7 +171,9 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 40%;
+    border-radius: 15px;
+    max-width: 60%;
+    
   }
   
  #modalText, .saveBtn {
@@ -180,10 +182,11 @@
 
   /* The Close Button */
   .close {
-    color: #aaaaaa;
+    color: #f0ad4e;
     float: right;
     font-size: 28px;
-    font-weight: bold;
+    font-weight: 800;
+    margin: 10px;
   }
   
   .close:hover,
