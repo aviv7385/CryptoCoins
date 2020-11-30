@@ -276,10 +276,10 @@ function removeCoins(coinValue) {
     const existingIndex = checkboxArray.indexOf(coinValue);
     if (existingIndex > -1) {
         checkboxArray.splice(existingIndex, 1);
+        $(`#${coinValue}`).prop("checked", false);//if a coin was removed - update its switch button (from "checked" to "unchecked") in the coin card 
         console.log(checkboxArray);
     }
     $(`.removeCoinBtn[value|='${coinValue}']`).fadeOut('slow');
-
 }
 
 //save button
@@ -308,11 +308,7 @@ $(function () {
     });
     //on page load - remove previous data from the session storage
     sessionStorage.removeItem("chosenCoins");
-
-
 })
-
-
 
 // ========================== LIVE REPORTS =================================
 
