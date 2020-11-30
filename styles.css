@@ -117,7 +117,7 @@
 /* ================= ABOUT ================ */
 
 .aboutMeHead, .aboutProHead {  
-    margin-top: 30px;
+    margin-top: 10px;
     font-weight: 800;
     letter-spacing: 1px;
 }
@@ -130,6 +130,7 @@
     line-height: 200%;
     text-align: justify;
     opacity: 0.9;
+    padding: 20px;
 }
 
 .aboutMe:hover, .aboutProject:hover {
