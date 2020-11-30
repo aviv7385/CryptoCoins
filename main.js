@@ -10,7 +10,7 @@ $(function () {
 
 async function getCoins() {
     //clear previous content
-    $(".cards-container").empty()
+    $(".cards-container").empty();
 
     //show spinner (progress bar)
     $(".cards-container").html(`
@@ -19,7 +19,7 @@ async function getCoins() {
             <span class="sr-only"></span>
         </div>
     </div>
-    `)
+    `);
 
     try {
         // //get the Promise object by calling the function where the Promise object was created
@@ -192,18 +192,23 @@ $("#aboutBtn").on("click", function () {
 // if the user chooses more than 5 coins - display a popup modal and ask the user to remove a coin or more, so there
 //would be no more than 5 coins
 
-let checkboxArray = [];
+let checkboxArray = []; // create an empty array for the coins the user will choose
 
 function toggleCheckbox(coin) {
     if ($(`#${coin}`).is(":checked")) {
         checkboxArray.push(coin);
+
     }
     else {
         const existingIndex = checkboxArray.indexOf(coin);
         if (existingIndex > -1) {
             checkboxArray.splice(existingIndex, 1);
+
         }
     }
+    // save to session storage
+    sessionStorage.setItem("chosenCoins", checkboxArray);
+
     console.log(checkboxArray);
 
     // if the user chooses more than 5 coins - display the modal with a list of the chosen coins 
@@ -213,13 +218,14 @@ function toggleCheckbox(coin) {
         const difference = numOfCoins - 5;
         $("#modalText").html(""); // delete previous content
         $("#modalText").html(`You chose ${numOfCoins} coins, please remove ${difference}`);
+        // for each chosen coin - create a button with the coin's symbol (that will be displayed in the popup modal) 
         const chosenCoins = checkboxArray.map(coin => `<button onclick="removeCoins(value)" class="btn btn-warning removeCoinBtn" type="button" value=${coin}>${coin}</button>`);
         $(".chosenCoins").html("").append(`
             <div>
             ${chosenCoins.join("  ")}
             </div>
         `)
-        myModal.style.display = "block";
+        myModal.style.display = "block"; // display the popup modal
     }
 }
 
@@ -227,10 +233,10 @@ function toggleCheckbox(coin) {
 const myModal = document.getElementById("myModal");
 
 // Get the <span> element that closes the modal
-const span = document.getElementsByClassName("close")[0];
+const closeModal = document.getElementsByClassName("close")[0];
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function () {
+closeModal.onclick = function () {
     myModal.style.display = "none";
 }
 
@@ -241,7 +247,7 @@ window.onclick = function (event) {
     }
 }
 
-// when the user clicks a coin button (inside the modal) - remove it from the chosen coins array
+// when the user clicks a coin button (inside the modal) - remove that coin from the chosen coins array
 // and remove the button from the modal
 function removeCoins(coinValue) {
     const existingIndex = checkboxArray.indexOf(coinValue);
@@ -250,14 +256,16 @@ function removeCoins(coinValue) {
         console.log(checkboxArray);
     }
     $(`.removeCoinBtn[value|='${coinValue}']`).fadeOut('slow');
+
 }
 
 //save button
-$(".saveBtn").on("click", function (){
-    if (checkboxArray.length > 5){
+$(".saveBtn").on("click", function () {
+    //validate that there up to 5 coins before saving the array
+    if (checkboxArray.length > 5) {
         const numOfCoins = checkboxArray.length;
         const difference = numOfCoins - 5;
-        $("#modalText").html("");
+        $("#modalText").html(""); // delete previous content
         $("#modalText").html(`You still have ${numOfCoins} coins, please remove ${difference}`);
     }
     else {
@@ -265,8 +273,90 @@ $(".saveBtn").on("click", function (){
         sessionStorage.setItem("chosenCoins", checkboxArray);
         myModal.style.display = "none";
     }
-
 });
+
+//each time the user clicks on the "Home" button - remove the array of chosen coins from the session storage
+$(function () {
+    // when navigating to home page - remove previous data from the session storage
+    $("#homeBtn").on("click", function () {
+        sessionStorage.removeItem("chosenCoins");
+        checkboxArray = [];
+
+    });
+    //on page load - remove previous data from the session storage
+    sessionStorage.removeItem("chosenCoins");
+
+
+})
+
+
+
+// ========================== LIVE REPORTS =================================
+
+
+$(function () {
+    $("#reportsBtn").on("click", getLiveData);
+})
+
+
+
+async function getLiveData() {
+    chosenCoinsArray = sessionStorage.getItem("chosenCoins");
+
+    if (chosenCoinsArray == null || chosenCoinsArray.length == 0) {
+        alert("You haven't selected any coin.\n Please select at least one coin to display a report.");
+    }
+
+    else {
+        //console.log(chosenCoinsArray);
+        //clear previous content
+        $(".cards-container").empty();
+
+        //show spinner (progress bar)
+        $(".cards-container").html(`
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                `);
+
+        try {
+            // //get the Promise object by calling the function where the Promise object was created
+            //and give the desired url as an object
+            const liveReportRequest = await getJsonFromServer(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${chosenCoinsArray}&tsyms=USD&api_key=b41c8b68d3f67f83019e2d0f099344d05e56f8a08e802d0349ca611f95aa3c48`);
+
+            //clear previous content - specifically the spinner
+            $(".cards-container").empty();
+
+            //display the report graph
+            //displayLiveReportGraph(liveReportRequest);
+            displayLiveReportGraph(liveReportRequest);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+}
+
+
+
+function displayLiveReportGraph(jsonObject) {
+    console.log(jsonObject);
+    for (const obj in jsonObject) {
+        console.log(obj);
+
+    }
+    //turn the json object to an array
+    const objArr = Object.values(jsonObject);
+    //console.log(objArr);
+    for (const item of objArr) {
+        console.log(item);
+    }
+}
+
+
+
 //---------------------------------------------------------------------------
 
 //save the array of coins objects (returned from the server) as an array of objects in the session storage
