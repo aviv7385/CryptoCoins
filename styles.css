@@ -29,7 +29,6 @@
 /* ============ navbar ============= */
 
 #navBtns, #coinSearch {
-    /* border: 2px solid black; */
     width: fit-content;  
     margin-left: 15%; 
 }
@@ -43,12 +42,10 @@
 /* ============== show coins =============== */
 
 .main-container {
-    /* border: 2px solid black; */
     max-width: 100%;
 }
 
 .cards-container {
-    /* border: 2px solid red; */
     margin-left: 5%;
     margin-top: 5%;
     width: 90%;
@@ -62,7 +59,6 @@
 }
 
 .coinCard { 
-    /* border: 3px solid red; */
     padding: 5px;
     margin: 0 0 3px 3px;
     height: fit-content;
@@ -74,13 +70,11 @@
 }
 
 #coinName, #coinSymbol, #coinToggle {
-    /* border: 3px solid red; */
     height: 80px;
     padding: 2px;
 }
 
 .mySwitch {
-    /* border: 3px solid red; */
     position: relative;
     width: fit-content;
     left: 60%;
@@ -101,7 +95,6 @@
 /* ===============  collapse ============== */
 
 .moreInfoBtn {
-    /* border: 3px solid red; */
     margin-top: 10px;
 }
 
@@ -139,7 +132,6 @@
 
 #myPic {
     width: 100px;
-    opacity: 0.9;
 }
 
 .logo {
@@ -149,7 +141,6 @@
 /* ============== footer ============= */
 
 #copyrights {
-    /* border: 2px solid red; */
     color: white;
     width: fit-content;
     letter-spacing: 2px;
@@ -157,7 +148,7 @@
     padding: 1% 0;
 }
 
-/* ====================== modal ================ */
+/* ============== modal ================ */
 
 /* The Modal (background) */
 .modal {
@@ -183,6 +174,10 @@
     width: 80%;
   }
   
+ #modalText, .chosenCoins, .saveBtn {
+     margin-top: 10px;
+ }
+
   /* The Close Button */
   .close {
     color: #aaaaaa;

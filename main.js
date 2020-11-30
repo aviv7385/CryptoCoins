@@ -22,17 +22,17 @@ async function getCoins() {
     `);
 
     try {
-        // //get the Promise object by calling the function where the Promise object was created
-        //and give the desired url as an object
+        // get the Promise object by calling the function where the Promise object was created
+        // and give the desired url as an object
         const cryptRequest = await getJsonFromServer("https://api.coingecko.com/api/v3/coins/list");
-        //clear previous content - specifically the spinner
+        // clear previous content - specifically the spinner
         $(".cards-container").empty();
-        //display the coin cards
+        // display all coin cards
         displayAllCoins(cryptRequest);
     }
 
     catch (err) {
-        console.log(err)
+        console.log(err);
     }
 }
 //------------------------------------------------------------------------------------------------------------------
@@ -44,8 +44,8 @@ function getJsonFromServer(jsonUrl) {
         $.ajax({
             url: jsonUrl,
             success: jsonRequest => resolve(jsonRequest),
-            error: err => reject(err),
-        })
+            error: err => reject(err)
+        });
     });
 }
 
@@ -86,9 +86,8 @@ function displayCoinCard(coin, index) {
             </div>
         </div>
     </div>
-    </div>`)
+    </div>`);
 }
-
 
 //this function gets an object (from an API) as an argument and will display the wanted information from that object 
 //by calling the displayCoinCard function
@@ -104,13 +103,11 @@ function displayAllCoins(cryptRequest) {
     }
 }
 
-//------------------------------------------------------------------------------
-
 // ======================== MORE INFO =======================
 
 // a function to get extra info about each coin (from the server)
 async function getMoreInfo(id, index) {
-    //show spinner (progress bar)
+    // show spinner (progress bar)
     $(`#moreInfo${index}`).html(`
     <div class="d-flex justify-content-center">
         <div class="spinner-border text-warning" role="status">
@@ -120,52 +117,51 @@ async function getMoreInfo(id, index) {
     `)
 
     try {
-        const moreInfoRequest = await getJsonFromServer(`https://api.coingecko.com/api/v3/coins/${id}`);
-        //clear previous content (specifically - the spinner)
-        $(`#moreInfo${index}`).empty();
+        const savedInfo = sessionStorage.getItem(id);
 
-
-
-        // saveToSessionStorage(id, $(".moreInfo")); //save the returned info in the session storage
-        // twoMinutesTimer(id)//delete object from session storage 2 minutes after the click
-
-        displayMoreInfo(moreInfoRequest, index); // display the information in the collapse
-
-        //-----------
-        //  const savedInfo = sessionStorage.getItem(id);
-
-        //  if (savedInfo != null) {
-        //      id = JSON.parse(savedInfo);
-        //      displayMoreInfo(savedInfo, index)
-        //  }
-        //--------------
-
-
+        if (savedInfo == null) {
+            // get data from remote server
+            const moreInfoRequest = await getJsonFromServer(`https://api.coingecko.com/api/v3/coins/${id}`);
+            // clear previous content (specifically - the spinner)
+            $(`#moreInfo${index}`).empty();
+            // display the data in the collapse area of the specific coin
+            displayMoreInfo(moreInfoRequest, index);
+            // after 2 minutes have passed - remove this info from the session storage
+            twoMinutesTimer(id); 
+        }
+        else {
+            $(`#moreInfo${index}`).html(savedInfo);
+        }
     }
     catch (err) {
-        console.log(err)
+        console.log(err);
     }
 }
 
 // a function to display the "more info" in the collapse area, when clicking the "more info" button
 function displayMoreInfo(infoRequest, index) {
-
     const currentCoinPrice = infoRequest.market_data.current_price;
+
     let moreInfo = `<img class="coinPic" src="${infoRequest.image.small}"><br>
     USD: $${currentCoinPrice.usd}<br>
     EUR: &euro;${currentCoinPrice.eur}<br>
-    ILS: ${currentCoinPrice.ils}&#8362;<br>`
+    ILS: ${currentCoinPrice.ils}&#8362;<br>`;
 
     $(`#moreInfo${index}`).html(moreInfo);
 
-    saveToSessionStorage(infoRequest.id, moreInfo);
-    twoMinutesTimer(infoRequest.id);
-
+    sessionStorage.setItem(infoRequest.id, moreInfo);//save info to session storage
+    //twoMinutesTimer(infoRequest.id); // after 2 minutes have passed - remove this info
 }
 
-//-------------------------------------------------------------------------------------------
+// remove item from session storage, 2 minutes after it was saved
+function twoMinutesTimer(id) {
+    setTimeout(() => {
+        sessionStorage.removeItem(id);
+    }, 120000)
+}
 
-//=========== ABOUT ==================
+
+//==================== ABOUT ===========================
 
 // a function to display the "about" page when clicking the "about" button
 $("#aboutBtn").on("click", function () {
@@ -197,39 +193,35 @@ $("#aboutBtn").on("click", function () {
                 <li>Bootstrap</li>
                 <li>jQuery</li>
             </ul>
-            Hope you like this website.<br>
+            Thank you for visiting my website!<br>
             Contact me: &nbsp;
             <a href="https://github.com/aviv7385"><img class="logo" src="Assets/images/GitHubLogo.png" alt="GitHubProfile"></a> &nbsp;
             <a href="https://www.linkedin.com/in/aviv-elad-a3b1a3105/"><img class="logo" src="Assets/images/linkedinLogo.png" alt="LinkedinProfile"></a>
 
         </p>
     </div>
-    `)
-})
+    `);
+});
 
-//-----------------------------------------------------------------------------------------------
-
-//=============== TOGGLE BUTTONS ===================
+//========================= TOGGLE SWITCH BUTTONS ==============================
 
 // when choosing a coin by checking the toggle checkbox, push it into an array 
 // if the user chooses more than 5 coins - display a popup modal and ask the user to remove a coin or more, so there
 //would be no more than 5 coins
 
-let checkboxArray = []; // create an empty array for the coins the user will choose
+let checkboxArray = []; // create an empty array for the coins the user will choose. I want this to be a global variable so I can access it in more functions.
 
 function toggleCheckbox(coin) {
-    if ($(`#${coin}`).is(":checked")) {
+    if ($(`#${coin}`).is(":checked")) { // if the switch button is checked - add it to the array
         checkboxArray.push(coin);
-
     }
-    else {
+    else { // if the switch button gets unchecked - remove it from the array
         const existingIndex = checkboxArray.indexOf(coin);
         if (existingIndex > -1) {
             checkboxArray.splice(existingIndex, 1);
-
         }
     }
-    // save to session storage
+    // save the array to session storage
     sessionStorage.setItem("chosenCoins", checkboxArray);
 
     console.log(checkboxArray);
@@ -241,7 +233,7 @@ function toggleCheckbox(coin) {
         const difference = numOfCoins - 5;
         $("#modalText").html(""); // delete previous content
         $("#modalText").html(`You chose ${numOfCoins} coins, please remove ${difference}`);
-        // for each chosen coin - create a button with the coin's symbol (that will be displayed in the popup modal) 
+        // for each chosen coin - create a button with the coin's symbol (those buttons will be displayed in the popup modal) 
         const chosenCoins = checkboxArray.map(coin => `<button onclick="removeCoins(value)" class="btn btn-warning removeCoinBtn" type="button" value=${coin}>${coin}</button>`);
         $(".chosenCoins").html("").append(`
             <div>
@@ -298,13 +290,12 @@ $(".saveBtn").on("click", function () {
     }
 });
 
-//each time the user clicks on the "Home" button - remove the array of chosen coins from the session storage
+//each time the user clicks on the "Home" button or refreshes the website - remove the array of chosen coins from the session storage
 $(function () {
     // when navigating to home page - remove previous data from the session storage
     $("#homeBtn").on("click", function () {
         sessionStorage.removeItem("chosenCoins");
         checkboxArray = [];
-
     });
     //on page load - remove previous data from the session storage
     sessionStorage.removeItem("chosenCoins");
@@ -312,12 +303,9 @@ $(function () {
 
 // ========================== LIVE REPORTS =================================
 
-
 $(function () {
     $("#reportsBtn").on("click", getLiveData);
 })
-
-
 
 async function getLiveData() {
     chosenCoinsArray = sessionStorage.getItem("chosenCoins");
@@ -358,8 +346,6 @@ async function getLiveData() {
     }
 }
 
-
-
 function displayLiveReportGraph(jsonObject) {
     console.log(jsonObject);
     for (const obj in jsonObject) {
@@ -368,13 +354,11 @@ function displayLiveReportGraph(jsonObject) {
     }
     //turn the json object to an array
     const objArr = Object.values(jsonObject);
-    //console.log(objArr);
+    console.log(objArr);
     for (const item of objArr) {
         console.log(item);
     }
 }
-
-
 
 //---------------------------------------------------------------------------
 
@@ -382,44 +366,16 @@ function displayLiveReportGraph(jsonObject) {
 //for the search feature (so the search will be produced locally instead of having to get information from the server each time)
 function saveCoinsToSessionStorage(coinObj) {
     let allCoins = [];
-
     let allCoinsJsonString = sessionStorage.getItem("allCoins");
     if (allCoinsJsonString != null) {
         allCoins = JSON.parse(allCoinsJsonString);
     }
-
     allCoins.push(coinObj);
-
     allCoinsJsonString = JSON.stringify(allCoins);
     sessionStorage.setItem("allCoins", allCoinsJsonString);
 }
 
-//save the information (returned from the server for the "more info" collapse section) in the session storage
-
-function saveToSessionStorage(id, moreInfoDiv) {
-
-
-    // let extraInfoJsonString = sessionStorage.getItem("extraInfo");
-    // if (extraInfoJsonString != null) {
-    //     extraInfo = JSON.parse(allExtraInfoJsonString);
-    // }
-
-
-    let extraInfo = JSON.stringify(moreInfoDiv);
-    sessionStorage.setItem(id, extraInfo);
-}
-
-// remove item from session storage, 2 minutes after it was saved
-let timer;
-function twoMinutesTimer(id) {
-    timer = setTimeout(() => {
-        sessionStorage.removeItem(id);
-    }, 120000)
-}
-
-//-------------------------------------------------------------------------------
-
-//======= SEARCH ========
+//========================= SEARCH ============================
 
 // this function gets a string as an argument and checks if this string matches to any of the specified obj fields 
 // that are in the array that is saved in the local storage
