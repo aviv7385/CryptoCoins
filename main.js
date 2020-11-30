@@ -175,11 +175,34 @@ $("#aboutBtn").on("click", function () {
     <div class="aboutMe col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <h3 class="aboutMeHead">ABOUT ME</h3>
         <img src="Assets/images/my pic.jpg" id="myPic">
-        <p class="aboutMePar">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tristique senectus et netus et malesuada fames ac turpis. Velit laoreet id donec ultrices tincidunt arcu non sodales neque. Ornare arcu odio ut sem. Lorem donec massa sapien faucibus et molestie ac. Eu volutpat odio facilisis mauris sit. Eu feugiat pretium nibh ipsum consequat nisl vel pretium. Laoreet id donec ultrices tincidunt arcu non sodales neque. Duis tristique sollicitudin nibh sit amet commodo nulla. Risus nec feugiat in fermentum posuere urna. Vulputate enim nulla aliquet porttitor lacus luctus accumsan. Felis imperdiet proin fermentum leo vel orci porta. Non arcu risus quis varius. Imperdiet proin fermentum leo vel orci porta non. Quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor sit. Massa id neque aliquam vestibulum morbi. Elit duis tristique sollicitudin nibh sit. Sed elementum tempus egestas sed sed risus.</p>
+        <p class="aboutMePar">
+            My name is Aviv Elad and I study Fullstack Web Development. If anyone would have told me 3 years ago that in 3 years I would change my career completely into that of a programmer - I would have laughed at the good joke. I have a BA in Linguistics from Tel Aviv University and I worked in the tourism and hospitality industry. I loved my job, I loved meeting new people every day from all over the world, but still - something was missing. Now I understand that I needed a new challenge in my life, and that is where developing came into the picture. Thanks to COVID 19 I lost my job but found a new passion in coding. 
+        </p>
     </div>
     <div class="aboutProject col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <h3 class="aboutProHead">ABOUT THE PROJECT</h3>
-        <p class="aboutProPar">Feugiat scelerisque varius morbi enim. Id nibh tortor id aliquet lectus. Vitae semper quis lectus nulla at. In massa tempor nec feugiat nisl pretium fusce. Dignissim suspendisse in est ante in nibh. Integer quis auctor elit sed vulputate mi sit amet. Quisque non tellus orci ac auctor augue mauris. Erat pellentesque adipiscing commodo elit at imperdiet dui accumsan sit. Lorem donec massa sapien faucibus et molestie ac feugiat sed. Nisi lacus sed viverra tellus in. Non enim praesent elementum facilisis leo vel. Morbi leo urna molestie at elementum eu facilisis.</p>
+        <p class="aboutProPar">
+            I have done this project for the Fullstack Web Development course I am taking at John Bryce college. The object of this project is to display real live information about crypto coins (such as bitcoin), by using a remote API. Some of the features in this website are:
+            <ul>
+                <li>Displaying 300 coins (out of 6000)</li>
+                <li>Displaying extra information on each coin (image and currency rates)</li>
+                <li>Searching for specific coins and displaying them (if found)</li>
+                <li>Choosing up to 5 coins and displaying a live report regarding currency rate (specifically USD)</li>
+            </ul>
+            The technologies I used:
+            <ul>
+                <li>HTML5</li>
+                <li>CSS3</li>
+                <li>Java Script</li>
+                <li>Bootstrap</li>
+                <li>jQuery</li>
+            </ul>
+            Hope you like this website.<br>
+            Contact me: &nbsp;
+            <a href="https://github.com/aviv7385"><img class="logo" src="Assets/images/GitHubLogo.png" alt="GitHubProfile"></a> &nbsp;
+            <a href="https://www.linkedin.com/in/aviv-elad-a3b1a3105/"><img class="logo" src="Assets/images/linkedinLogo.png" alt="LinkedinProfile"></a>
+
+        </p>
     </div>
     `)
 })
