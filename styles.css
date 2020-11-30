@@ -171,11 +171,11 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 40%;
   }
   
- #modalText, .chosenCoins, .saveBtn {
-     margin-top: 10px;
+ #modalText, .saveBtn {
+     margin: 10px;
  }
 
   /* The Close Button */
@@ -194,6 +194,7 @@
   }
 
   .removeCoinBtn {
+    margin: 5px;
     border-color: #ff9800;
     background-color: transparent;
     color: orange;
@@ -204,8 +205,8 @@
     color: white;
   }
 
-  .modalSave {
-      margin-top: 10px;
+  .chosenCoins {
+      margin-left: 5px;
   }
 
 
