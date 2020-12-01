@@ -21,10 +21,20 @@
     text-shadow: 3px 3px 3px black;
 }
 
-.spinner-border {
-    width: 3rem; 
-    height: 3rem;
+.spinner-grow, .spinner-border {
+    width: 100px; 
+    height: 100px;
 }
+
+.wip {
+    color: #e8b015;
+    text-align: center;
+    font-weight: 800;
+    font-size: 50pt;
+    text-shadow:5px 5px 5px black;
+    width: 100%;  
+}
+
 
 /* ============ navbar ============= */
 

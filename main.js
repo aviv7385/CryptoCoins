@@ -126,8 +126,6 @@ async function getMoreInfo(id, index) {
             $(`#moreInfo${index}`).empty();
             // display the data in the collapse area of the specific coin
             displayMoreInfo(moreInfoRequest, index);
-            // after 2 minutes have passed - remove this info from the session storage
-            twoMinutesTimer(id); 
         }
         else {
             $(`#moreInfo${index}`).html(savedInfo);
@@ -150,7 +148,7 @@ function displayMoreInfo(infoRequest, index) {
     $(`#moreInfo${index}`).html(moreInfo);
 
     sessionStorage.setItem(infoRequest.id, moreInfo);//save info to session storage
-    //twoMinutesTimer(infoRequest.id); // after 2 minutes have passed - remove this info
+    twoMinutesTimer(infoRequest.id);  // after 2 minutes have passed - remove this info from the session storage
 }
 
 // remove item from session storage, 2 minutes after it was saved
@@ -172,7 +170,7 @@ $("#aboutBtn").on("click", function () {
         <h3 class="aboutMeHead">ABOUT ME</h3>
         <img src="Assets/images/my pic.jpg" id="myPic">
         <p class="aboutMePar">
-            My name is Aviv Elad and I study Fullstack Web Development. If anyone would have told me 3 years ago that in 3 years I would change my career completely into that of a programmer - I would have laughed at the good joke. I have a BA in Linguistics from Tel Aviv University and I worked in the tourism and hospitality industry. I loved my job, I loved meeting new people every day from all over the world, but still - something was missing. Now I understand that I needed a new challenge in my life, and that is where developing came into the picture. Thanks to COVID 19 I lost my job but found a new passion in coding. 
+            My name is Aviv Elad and I study Fullstack Web Development. If anyone would have told me 3 years ago that in 3 years I would change my career completely into that of a programmer - I would have laughed at the good joke. I have a BA in Linguistics from Tel Aviv University and I worked in the tourism and hospitality industry. I loved my job, I loved meeting new people every day from all over the world, but still - something was missing. Now I understand that I needed a new challenge in my life, and that is where programming came into the picture. 
         </p>
     </div>
     <div class="aboutProject col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -322,7 +320,7 @@ async function getLiveData() {
         //show spinner (progress bar)
         $(".cards-container").html(`
                 <div class="d-flex justify-content-center">
-                    <div class="spinner-border text-light" role="status">
+                    <div class="spinner-grow text-warning" role="status">
                         <span class="sr-only"></span>
                     </div>
                 </div>
@@ -334,32 +332,17 @@ async function getLiveData() {
             const liveReportRequest = await getJsonFromServer(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${chosenCoinsArray}&tsyms=USD&api_key=b41c8b68d3f67f83019e2d0f099344d05e56f8a08e802d0349ca611f95aa3c48`);
 
             //clear previous content - specifically the spinner
-            $(".cards-container").empty();
+            $(".cards-container").html(
+                `<div class="test"><h1 class="wip">COMING SOON</h1></div>`
+            );
 
-            //display the report graph
-            //displayLiveReportGraph(liveReportRequest);
-            displayLiveReportGraph(liveReportRequest);
+            
         }
         catch (err) {
             console.log(err)
         }
     }
 }
-
-function displayLiveReportGraph(jsonObject) {
-    console.log(jsonObject);
-    for (const obj in jsonObject) {
-        console.log(obj);
-
-    }
-    //turn the json object to an array
-    const objArr = Object.values(jsonObject);
-    console.log(objArr);
-    for (const item of objArr) {
-        console.log(item);
-    }
-}
-
 //---------------------------------------------------------------------------
 
 //save the array of coins objects (returned from the server) as an array of objects in the session storage
